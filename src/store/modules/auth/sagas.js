@@ -7,15 +7,11 @@ import api from "~/services/api";
 export function* signIn({ payload }) {
   try {
     const { username, password } = payload;
-    console.tron.error("Chego aki");
-    const response = yield call(
-      api.post,
-      "http://versionator-api.herokuapp.com/api-token-auth/",
-      {
-        username,
-        password,
-      }
-    );
+
+    const response = yield call(api.post, "signin/", {
+      username,
+      password,
+    });
 
     const { token } = response.data;
 
@@ -25,7 +21,6 @@ export function* signIn({ payload }) {
 
     history.push("/dashboard");
   } catch (error) {
-    console.tron.error(error);
     toast.error("Falha na authenticação, verifique seus dados");
     yield put(signFailure());
   }
@@ -37,7 +32,7 @@ export function setToken({ payload }) {
   const { token } = payload.auth;
 
   if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers.Authorization = `Token ${token}`;
   }
 }
 export function signOut() {
